@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
+const Name = require('./mongo.js')
 
 app.use(cors())
 app.use(express.json())
@@ -12,7 +14,7 @@ morgan.token('body', function (req, res) {
   return JSON.stringify(req.body)
 })
 
-let persons = [
+/*let persons = [
   {
     id: 1,
     name: "Arto Hietala",
@@ -33,10 +35,12 @@ let persons = [
     name: "Mary Poppendick",
     number: "39-23-6423122"
   }
-]
+]*/
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Name.find({}).then(names => {
+    res.json(persons)
+  })
 })
 
 app.get('/info', (req,res) => {
@@ -50,15 +54,9 @@ app.get('/info', (req,res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = persons.find(person => person.id === id)
-
-  if(person) {
-    res.json(person)
-  }
-  else {
-    res.status(404).end()
-  }
+  Name.findById(request.params.id).then(name => {
+    response.json(name)
+  })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -99,7 +97,7 @@ app.post('/api/persons', morgan(':method :url :status :res[content-length] - :re
   
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
