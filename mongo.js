@@ -2,12 +2,12 @@ require('dotenv').config()
 const mongoose = require('mongoose')
 
 
-if (process.argv.length<3) {
+/*if (process.argv.length<3) {
     console.log('Give password as an argument')
     process.exit(1)
-  }
+  }*/
   
-const password = process.argv[2]
+//const password = process.argv[2]
   
 const url = process.env.MONGODB_URI
 //`mongodb+srv://vestakulomaa:${password}@cluster0.tctg3hr.mongodb.net/NameApp?retryWrites=true&w=majority`
@@ -38,9 +38,9 @@ nameSchema.set('toJSON', {
   
 const Name = mongoose.model('Name', nameSchema)
 
-if (process.argv.length == 5) { //add name + number to phonebook
-    const new_name = process.argv[3]
-    const new_number = process.argv[4]
+/*if (process.argv.length == 4) { //add name + number to phonebook
+    const new_name = process.argv[2]
+    const new_number = process.argv[3]
 
     const name = new Name({
         name: new_name,
@@ -51,10 +51,10 @@ if (process.argv.length == 5) { //add name + number to phonebook
         console.log(`Added ${new_name} number ${new_number} to phonebook!`)
         mongoose.connection.close()
       })
-}
+}*/
 
 if (process.argv.length == 3) {
-    
+
     console.log("Phonebook:")
 
     Name.find({}).then(result => {
