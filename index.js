@@ -9,10 +9,10 @@ const Name = require('./models/name')
 const errorHandler = (error, req, res, next) => {
   console.log(error.message)
   if (error.name === 'CastError') {
-    return res.status(400).send({ error: 'malformatted id'})
+    return res.status(400).send({ error: 'malformatted id' })
   }
   else if (error.name === 'ValidationError') {
-    return res.status(400).json({error: error.message})
+    return res.status(400).json({ error: error.message })
   }
   next(error)
 }
@@ -22,7 +22,7 @@ app.use(express.static('build'))
 app.use(express.json())
 app.use(morgan('tiny'))
 
-morgan.token('body', function (req, res) {
+morgan.token('body', function (req) {
   return JSON.stringify(req.body)
 })
 
@@ -36,7 +36,7 @@ app.get('/api/persons', (req, res) => {
 app.get('/info', (req,res) => {
   let date = new Date()
   Name.find({}).then(names => {
-    nro_of_people = names.length
+    const nro_of_people = names.length
     res.send(
       `<div>
         <p> Phonebook has info for ${nro_of_people} people </p>
@@ -47,7 +47,7 @@ app.get('/info', (req,res) => {
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
-  console.log("one person")
+  console.log('one person')
   Name.findById(req.params.id)
     .then(name => {
       if (name) {
@@ -65,9 +65,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
   //persons = persons.filter(person => person.id !== id)
   //res.status(204).end()
   Name.findByIdAndDelete(req.params.id)
-    .then(r => {
-      res.status(204).end()
-    })
+    .then(res.status(204).end())
     .catch(error => next(error))
 
 })
@@ -77,29 +75,29 @@ app.post('/api/persons', morgan(':method :url :status :res[content-length] - :re
   //while(persons.find(person => person.id === id)) {
   //  id = Math.floor(Math.random() * 50)
   //}
-  console.log("app post")
+  console.log('app post')
 
   const person = req.body
 
   if(!person.name || !person.number) {
-    console.log("either name or number was missing")
+    console.log('either name or number was missing')
     res.status(400)
     return res.json({
       error: 'either name or number was missing'
     }).end()
-    
+
   }
 
   //const person_name = person.name
   //Name.find({person_name}) //ei toimi
   //  .then(console.log("name was already in phonebook"))
-    //const id = persons.find(p => p.name === person.name)
-    //Name.findByIdAndUpdate(id)
-    //  .then(r => {
-    //    res.status(204).end()
-    //  })
-    //  .catch(error => next(error))
-  
+  //const id = persons.find(p => p.name === person.name)
+  //Name.findByIdAndUpdate(id)
+  //  .then(r => {
+  //    res.status(204).end()
+  //  })
+  //  .catch(error => next(error))
+
 
   //person.id = id
 
@@ -119,9 +117,9 @@ app.post('/api/persons', morgan(':method :url :status :res[content-length] - :re
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-  console.log("app put")
+  console.log('app put')
   console.log(req.body.number)
-  Name.findByIdAndUpdate(req.params.id, {"number": req.body.number}, {new: true})
+  Name.findByIdAndUpdate(req.params.id, { 'number': req.body.number }, { new: true })
     .then(returnedPerson => {
       res.json(returnedPerson)
     })
